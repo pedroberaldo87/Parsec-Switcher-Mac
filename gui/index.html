@@ -3,88 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <title>Parsec Switcher</title>
-  <link rel="stylesheet" href="style.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div id = "admin-priv" style="display: none">
-  <div class="alert alert-parsec-danger" role="alert">
-    <h4 class="alert-heading">Need Admin privilege!</h4>
-    <p>Parsec switcher needs admin access to work :(</p>
-    Please launch program with admin rights.
-    <hr>
-    <p class="mb-0">Want to report bug ? Report it here: https://github.com/DefineX-Studios/parsec-account-switcher</p>
-  </div>
-</div>
-<div class="m-3 p-3">
-  <div class="card">
-    <div class="card-header">
-      <div class="row mb-3">
-        <div class="col-sm-12">
-          <h1>Parsec Switcher</h1>
-          <p class="subheading text-muted-p">Simplify your experience, amplify your productivity.</p>
+  <div class="app-shell">
+
+    <!-- Alert: Admin Required (Windows only) -->
+    <div id="admin-priv">
+      <div class="alert-banner">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <p><strong>Permissão necessária!</strong> O Parsec Switcher precisa de acesso de administrador para funcionar. Feche e abra novamente como administrador.</p>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-meta">
+        <div>
+          <h1 class="app-title">
+            <span class="icon-glow"><i class="fa-solid fa-shuffle"></i></span>
+            Parsec Switcher
+          </h1>
+          <p class="app-subtitle">Gerencie suas contas Parsec em um clique</p>
         </div>
+        <span class="version-badge" id="parsec_version"></span>
       </div>
-    </div>
-    <div class="card-body">
-      <h5 class="card-title text-white p-2 m-2">Manage parsec account (Double click on any account to login)</h5>
-      <div id="accounts-container" class="row justify-content-center"></div>
-    </div>
-    <div class="card-footer">
-      <div class="row">
-        <div class="col-sm-2"><span id="parsec_version" class="version"></span></div>
-        <div class="col-sm-10">
-          <button class="main-btn m-2" id="add-account-btn">
-            <i class="fa fa-user-plus"></i> Add Parsec Account
-          </button>
-        </div>
-      </div>
+    </header>
 
+    <!-- Accounts -->
+    <section class="accounts-section">
+      <div class="section-label">Suas Contas</div>
+      <div id="accounts-container" class="accounts-grid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <button class="add-account-btn" id="add-account-btn">
+        <i class="fa-solid fa-user-plus"></i>
+        Adicionar Conta
+      </button>
+    </footer>
+
+  </div>
+
+  <!-- Popup Container -->
+  <div id="popup-div"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <span class="loading-text">PROCESSANDO</span>
     </div>
   </div>
-</div>
 
-<!-- popups  here -->
-<div id="popup-div"></div>
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
 
-
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-lg-6">
-      <div id="loading-overlay">
-        <div id="loading-message">Loading  <i class="fa-solid fa-spinner"></i></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- toast -->
-<div class="container">
-  <div class="row justify-content-end">
-    <div class="col-lg-6">
-      <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:99999999999"></div>
-    </div>
-  </div>
-</div>
-
-<!--Help Button-->
-<div class="container">
-  <div class="row justify-content-end">
-    <div class="col-lg-6">
-      <div class="help-button">
-        <button type="button" class="btn btn-primary" onclick="openLinkInDefaultBrowser()">
-          <i class="fa fa-question"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
-<script src="control.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+  <script src="control.js"></script>
 </body>
 </html>

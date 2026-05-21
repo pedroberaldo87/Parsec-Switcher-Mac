@@ -64,8 +64,8 @@ async function cli(){
         .description('Manually set the location of parsec installation')
         .argument('<parsecInstallDir>','Parsec Installation Directory')
         .action(async (parsecInstallDir,options)=>{
-            // logger.debug(`Deleting account ${username}`)
-            global_state.locations['parsecdLocation'] = path.join(parsecInstallDir, 'parsecd.exe')
+            const execName = process.platform === 'darwin' ? 'parsecd' : 'parsecd.exe'
+            global_state.locations['parsecdLocation'] = path.join(parsecInstallDir, execName)
             opFlag = 0
         });
 
