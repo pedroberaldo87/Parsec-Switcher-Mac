@@ -1,6 +1,6 @@
 const { app, BrowserWindow} = require("electron");
 const path = require("path");
-const {addAccount,deleteAccount,returnAccountList, switchAccount} = require('../lib/account-handler')
+const {addAccount,deleteAccount,returnAccountList, switchAccount, renameAccountHandler} = require('../lib/account-handler')
 const {initialize, global_state} = require("../lib/initialize");
 const {program}  = require('commander')
 const {error,errorToMessage} = require("../lib/error");
@@ -60,6 +60,15 @@ async function cli(){
             logger.info(`Deleting account ${username}`)
             opFlag = await deleteAccount(username)
         });
+    program.command('rename')
+        .description('Rename an existing account')
+        .argument('<oldName>','Current account name')
+        .argument('<newName>','New account name')
+        .action(async (oldName, newName, options)=>{
+            logger.info(`Renaming account ${oldName} to ${newName}`)
+            opFlag = await renameAccountHandler(oldName, newName)
+        });
+
     program.command('setLoc')
         .description('Manually set the location of parsec installation')
         .argument('<parsecInstallDir>','Parsec Installation Directory')

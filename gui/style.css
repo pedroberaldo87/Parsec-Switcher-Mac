@@ -298,6 +298,12 @@ body::after {
   color: var(--neon-cyan);
 }
 
+.card-actions .btn-rename:hover {
+  background: rgba(123, 47, 255, 0.1);
+  border-color: rgba(123, 47, 255, 0.3);
+  color: var(--neon-purple);
+}
+
 .card-actions .btn-delete:hover {
   background: rgba(255, 0, 110, 0.1);
   border-color: rgba(255, 0, 110, 0.3);
