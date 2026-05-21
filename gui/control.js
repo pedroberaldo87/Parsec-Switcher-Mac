@@ -64,6 +64,16 @@ function render() {
         document.getElementById(`switch-btn-${nickname}`).addEventListener('click', ()=>switchAccountHandler(nickname));
         document.getElementById(`nick-${nickname}`).addEventListener('dblclick', ()=>switchAccountHandler(nickname));
 
+        document.getElementById(`rename-btn-${nickname}`).addEventListener('click', async function () {
+            const newName = await showTextInputPopup(`Novo nome para "${nickname}"`, "Renomear");
+            if (!newName) return;
+            await runWithLoading(async () => {
+                const err = await PSS.renameAccountHandler(nickname, newName);
+                if (!err) return;
+                showToast("Erro!", errorToMessage[err]);
+            });
+        });
+
         document.getElementById(`delete-btn-${nickname}`).addEventListener('click', async function () {
             const agreed = await showYesNoPopup(`Tem certeza que deseja excluir a conta "${nickname}"?`, "Cancelar", "Excluir");
             if (!agreed) return;

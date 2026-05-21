@@ -13,6 +13,9 @@ function generate_user_card(userNickname, isCurrent){
             <i class="fa-solid ${isCurrent ? 'fa-circle-check' : 'fa-right-left'}"></i>
             ${isCurrent ? 'Ativa' : 'Trocar'}
         </button>
+        <button class="btn-rename" id="rename-btn-${userNickname}" title="Renomear conta">
+            <i class="fa-solid fa-pen"></i>
+        </button>
         <button class="btn-delete" id="delete-btn-${userNickname}" title="Excluir conta">
             <i class="fa-solid fa-trash-can"></i>
         </button>
