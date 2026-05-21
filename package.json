@@ -38,6 +38,11 @@
       "target": "nsis",
       "requestedExecutionLevel": "requireAdministrator"
     },
+    "mac": {
+      "target": "dmg",
+      "icon": "icon.icns",
+      "category": "public.app-category.utilities"
+    },
     "nsis": {
       "oneClick": false,
       "perMachine": true,
