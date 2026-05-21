@@ -1,59 +1,13 @@
 {
   "name": "parsec-switcher",
-  "version": "0.0.12",
-  "description": "Allows for keeping multiple parsec accounts and switch between them",
-  "main": "gui/gui_cli.js",
-  "bin": {
-    "parsec-switcher": "gui_cli.js"
-  },
-  "keywords": [],
-  "author": "DefineX Studios",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Manage multiple Parsec accounts on macOS",
+  "author": "Pedro Beraldo",
   "license": "MIT",
-  "dependencies": {
-    "await-timeout": "^1.1.1",
-    "child_process": "^1.0.2",
-    "commander": "^11.0.0",
-    "electron-is-dev": "^2.0.0",
-    "electron-packager": "^17.1.2",
-    "electron-unhandled": "^4.0.1",
-    "electron-updater": "^6.1.4",
-    "pino": "^8.15.0",
-    "process": "^0.11.10",
-    "rimraf": "^5.0.1",
-    "@electron/remote": "^2.1.0"
-  },
-  "devDependencies": {
-    "electron": "^25.5.0",
-    "electron-builder": "^24.6.4",
-    "electron-rebuild": "^3.2.9"
-  },
-  "build": {
-    "appId": "com.definex.parsec-switcher",
-    "productName": "ParsecSwitcher",
-    "artifactName": "${productName}-Setup.${ext}",
-    "directories": {
-      "output": "dist"
-    },
-    "win": {
-      "target": "nsis",
-      "requestedExecutionLevel": "requireAdministrator"
-    },
-    "mac": {
-      "target": "dmg",
-      "icon": "icon.icns",
-      "category": "public.app-category.utilities"
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true
-    }
-  },
   "scripts": {
-    "postinstall": "electron-builder install-app-deps"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DefineX-Studios/parsec-account-switcher"
+    "tauri": "cargo tauri",
+    "dev": "cargo tauri dev",
+    "build": "cargo tauri build"
   }
 }
