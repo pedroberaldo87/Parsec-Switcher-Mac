@@ -1,5 +1,3 @@
-const {getInitials} = require("./utils");
-
 function generate_user_card(userNickname, isCurrent){
     return `
 <div class="user-card ${isCurrent ? 'active-account' : ''}" id="nick-${userNickname}">
@@ -76,5 +74,3 @@ function generate_toast(title, description){
     <div class="toast-body">${description}</div>
 </div>`
 }
-
-module.exports = {generate_user_card, generate_yes_no_popup, generate_text_input_popup, generate_toast}

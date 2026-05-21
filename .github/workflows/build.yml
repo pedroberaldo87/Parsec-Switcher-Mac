@@ -4,31 +4,25 @@ on: push
 
 jobs:
   release:
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
     permissions:
       contents: write
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest]
-
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1.6.0
-        with:
-          # GitHub token, automatically provided to the action
-          # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.github_token }}
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version "^2"
 
-          # If the commit is tagged with a version (e.g. "v1.0.0"),
-          # release the app after building
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
-          
-          args: --publish=always
+      - name: Build Tauri app
+        run: cargo tauri build
+
+      - name: Upload artifact
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            src-tauri/target/release/bundle/dmg/*.dmg
