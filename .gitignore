@@ -9,3 +9,6 @@ src-tauri/gen/
 *.icns
 package-lock.json
 yarn.lock
+
+# Local agent notes (never published)
+.claude/
