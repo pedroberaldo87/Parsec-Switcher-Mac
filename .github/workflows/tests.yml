@@ -1,0 +1,33 @@
+name: Tests
+
+# CI only runs tests. Builds and releases are always done locally by the
+# maintainer (scripts/release-local.sh), never by GitHub Actions.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: stable
+
+      - name: Front-end checks
+        run: node --test tests/*.test.mjs
+
+      - name: Rust tests
+        working-directory: src-tauri
+        run: cargo test --locked
