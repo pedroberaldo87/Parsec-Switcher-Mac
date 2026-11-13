@@ -17,12 +17,12 @@ function switchAccountHandler(nickname) {
 
 async function getParsecVersion() {
     const version = await invoke('get_app_version');
-    document.getElementById('parsec_version').innerHTML = "v" + version;
+    document.getElementById('parsec_version').textContent = "v" + version;
 }
 
 async function render() {
     await getParsecVersion();
-    accountsContainer.innerHTML = "";
+    accountsContainer.replaceChildren();
 
     let state;
     try {
@@ -35,22 +35,18 @@ async function render() {
     const { accounts, current_user: currentUser } = state;
 
     if (accounts.length === 0) {
-        accountsContainer.innerHTML = `
-            <div class="empty-state">
-                <i class="fa-solid fa-users-slash"></i>
-                <p>Nenhuma conta cadastrada</p>
-            </div>`;
+        accountsContainer.append(generate_empty_state());
         return;
     }
 
     for (const nickname of accounts) {
-        const userCardString = generate_user_card(nickname, nickname === currentUser);
-        accountsContainer.insertAdjacentHTML('beforeend', userCardString);
+        const { card, switchBtn, renameBtn, deleteBtn } = generate_user_card(nickname, nickname === currentUser);
+        accountsContainer.append(card);
 
-        document.getElementById(`switch-btn-${nickname}`).addEventListener('click', () => switchAccountHandler(nickname));
-        document.getElementById(`nick-${nickname}`).addEventListener('dblclick', () => switchAccountHandler(nickname));
+        switchBtn.addEventListener('click', () => switchAccountHandler(nickname));
+        card.addEventListener('dblclick', () => switchAccountHandler(nickname));
 
-        document.getElementById(`rename-btn-${nickname}`).addEventListener('click', async function () {
+        renameBtn.addEventListener('click', async function () {
             const newName = await showTextInputPopup(`Novo nome para "${nickname}"`, "Renomear");
             if (!newName) return;
             await runWithLoading(async () => {
@@ -63,7 +59,7 @@ async function render() {
             });
         });
 
-        document.getElementById(`delete-btn-${nickname}`).addEventListener('click', async function () {
+        deleteBtn.addEventListener('click', async function () {
             const agreed = await showYesNoPopup(`Tem certeza que deseja excluir a conta "${nickname}"?`, "Cancelar", "Excluir");
             if (!agreed) return;
             await runWithLoading(async () => {
