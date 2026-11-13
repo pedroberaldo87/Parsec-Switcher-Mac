@@ -11,7 +11,7 @@ A macOS port (Tauri v2, Rust) of [DefineX-Studios/parsec-switcher](https://githu
 1. Install Parsec in `/Applications` (the app starts and stops `/Applications/Parsec.app`).
 2. Download the latest `.dmg` from the [Releases page](https://github.com/pedroberaldo87/Parsec-Switcher-Mac/releases/latest) and drag **ParsecSwitcher** to `/Applications`.
 
-**Apple Silicon only.** The release is built on an arm64 runner, so it runs on M1 and newer Macs. For an Intel Mac, build from source (below).
+**Apple Silicon only.** The release is built on an Apple Silicon Mac, so it runs on M1 and newer Macs. For an Intel Mac, build from source (below).
 
 ### The app is not signed or notarized
 
@@ -45,6 +45,16 @@ cargo tauri dev            # run in development
 cd src-tauri && cargo test # Rust tests
 node --test tests/*.test.mjs  # front-end checks
 ```
+
+## Releases
+
+The DMG on the Releases page is built locally by the maintainer, never by GitHub Actions. CI only runs the tests (`.github/workflows/tests.yml`). Each release has a `SHA256SUMS` file next to the DMG. To check your download:
+
+```sh
+shasum -a 256 -c SHA256SUMS
+```
+
+Maintainers: `scripts/release-local.sh <version>` checks that the version matches `tauri.conf.json`, `Cargo.toml` and `package.json`, runs the tests, builds the DMG, verifies its signature and writes `SHA256SUMS`. It prints the `git tag`, `git push` and `gh release create --draft` commands. With `--publish` it runs them, creating a draft release that you publish by hand.
 
 ## Credits and license
 
