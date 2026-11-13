@@ -54,6 +54,7 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
 
 [ "$(uname -s)" = Darwin ] || die "this script builds a macOS DMG and must run on a Mac"
+[ "$(uname -m)" = arm64 ] || die "releases are Apple Silicon only; run this on an Apple Silicon Mac"
 for tool in git node cargo hdiutil codesign shasum; do
   command -v "$tool" >/dev/null || die "missing tool: $tool"
 done
