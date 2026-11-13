@@ -1,3 +1,3 @@
 function getInitials(name) {
-    return name.split(" ").map(word => word[0]).join("").toUpperCase();
+    return name.split(" ").filter(Boolean).map(word => Array.from(word)[0]).join("").toUpperCase();
 }

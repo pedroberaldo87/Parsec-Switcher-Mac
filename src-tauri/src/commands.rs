@@ -5,6 +5,7 @@ use crate::state::AppState;
 use crate::error::AppError;
 use crate::constants;
 use crate::files;
+use crate::nickname;
 use crate::process;
 
 #[derive(Serialize)]
@@ -39,6 +40,7 @@ pub fn list_accounts(state: State<'_, Mutex<AppState>>) -> Result<AccountList, S
 
 #[tauri::command]
 pub fn add_account(nickname: String, state: State<'_, Mutex<AppState>>) -> Result<(), String> {
+    nickname::validate(&nickname).map_err(String::from)?;
     let mut state = state.lock().unwrap();
     if state.data.contains_key(&nickname) {
         return Err(AppError::NicknameExists.into());
@@ -53,6 +55,7 @@ pub fn add_account(nickname: String, state: State<'_, Mutex<AppState>>) -> Resul
 
 #[tauri::command]
 pub fn switch_account(nickname: String, state: State<'_, Mutex<AppState>>) -> Result<(), String> {
+    nickname::validate(&nickname).map_err(String::from)?;
     let mut state = state.lock().unwrap();
     if !state.data.contains_key(&nickname) {
         return Err(AppError::NicknameNotExists.into());
@@ -71,10 +74,10 @@ pub fn delete_account(nickname: String, state: State<'_, Mutex<AppState>>) -> Re
     if !state.data.contains_key(&nickname) {
         return Err(AppError::NicknameNotExists.into());
     }
+    let user_folder = nickname::folder_in(&constants::multi_user_path(), &nickname).map_err(String::from)?;
 
     state.data.remove(&nickname);
 
-    let user_folder = constants::multi_user_path().join(&nickname);
     if files::check_exists(&user_folder) {
         files::delete_folder(&user_folder).map_err(String::from)?;
     }
@@ -109,8 +112,8 @@ pub fn rename_account(old_nickname: String, new_nickname: String, state: State<'
         return Err(AppError::NicknameExists.into());
     }
 
-    let old_folder = constants::multi_user_path().join(&old_nickname);
-    let new_folder = constants::multi_user_path().join(&new_nickname);
+    let old_folder = nickname::folder_in(&constants::multi_user_path(), &old_nickname).map_err(String::from)?;
+    let new_folder = nickname::folder_in(&constants::multi_user_path(), &new_nickname).map_err(String::from)?;
     let new_file_path = new_folder.join("user.bin");
 
     if files::check_exists(&old_folder) {
@@ -137,16 +140,21 @@ pub fn get_app_version() -> String {
 fn switch_account_data(state: &mut AppState, nickname: &str) -> Result<(), AppError> {
     let parsec_user = constants::parsec_user_bin();
 
-    if !state.config.current_user.is_empty() {
-        let current_dir = constants::multi_user_path().join(&state.config.current_user);
+    // Validate every path before touching any file, so a bad name fails with nothing moved.
+    let current_dir = if state.config.current_user.is_empty() {
+        None
+    } else {
+        Some(nickname::folder_in(&constants::multi_user_path(), &state.config.current_user)?)
+    };
+    let nickname_folder = nickname::folder_in(&constants::multi_user_path(), nickname)?;
+    let nickname_file = nickname_folder.join("user.bin");
+
+    if let Some(current_dir) = current_dir {
         let current_file = current_dir.join("user.bin");
         if files::check_exists(&parsec_user) {
             files::move_path(&parsec_user, &current_file)?;
         }
     }
-
-    let nickname_folder = constants::multi_user_path().join(nickname);
-    let nickname_file = nickname_folder.join("user.bin");
 
     if !files::check_exists(&nickname_folder) {
         files::make_dir(&nickname_folder)?;

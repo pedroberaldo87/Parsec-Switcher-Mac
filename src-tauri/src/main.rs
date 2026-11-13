@@ -4,6 +4,7 @@ mod commands;
 mod constants;
 mod error;
 mod files;
+mod nickname;
 mod process;
 mod state;
 

@@ -1,0 +1,17 @@
+/* Self-hosted copies of the Google Fonts "Orbitron" and "Outfit" (latin subset,
+   variable fonts), so the app makes no network request at startup.
+   Both fonts are licensed under the SIL Open Font License 1.1 — see README.md in the parent folder. */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url(orbitron-latin.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(outfit-latin.woff2) format('woff2');
+}

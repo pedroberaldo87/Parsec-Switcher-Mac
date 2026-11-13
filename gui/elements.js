@@ -9,10 +9,9 @@ async function runWithLoading(toRun) {
 }
 
 async function showYesNoPopup(description, negative_text, positive_text){
-    const html = generate_yes_no_popup(description, negative_text, positive_text);
-    const popupDiv = document.getElementById("popup-div");
-    popupDiv.innerHTML = html;
-    const modal = new bootstrap.Modal(document.querySelector("#yes-no-popup"));
+    const { root, closeBtn, noBtn, yesBtn } = generate_yes_no_popup(description, negative_text, positive_text);
+    document.getElementById("popup-div").replaceChildren(root);
+    const modal = new bootstrap.Modal(root);
     modal.show();
 
     return new Promise(resolve => {
@@ -20,20 +19,17 @@ async function showYesNoPopup(description, negative_text, positive_text){
             modal.hide();
             resolve(result);
         }
-        document.getElementById('yes-no-popup-backdrop-btn').addEventListener('click', () => resolveAndClose(false));
-        document.getElementById('yes-no-popup-negative-btn').addEventListener('click', () => resolveAndClose(false));
-        document.getElementById('yes-no-popup-positive-btn').addEventListener('click', () => resolveAndClose(true));
+        closeBtn.addEventListener('click', () => resolveAndClose(false));
+        noBtn.addEventListener('click', () => resolveAndClose(false));
+        yesBtn.addEventListener('click', () => resolveAndClose(true));
     });
 }
 
 async function showTextInputPopup(placeholder, submit_text_button){
-    const html = generate_text_input_popup(placeholder, submit_text_button);
-    const popupDiv = document.getElementById("popup-div");
-    popupDiv.innerHTML = html;
-    const modal = new bootstrap.Modal(document.querySelector("#text-input-popup"));
+    const { root, closeBtn, input, submitBtn } = generate_text_input_popup(placeholder, submit_text_button);
+    document.getElementById("popup-div").replaceChildren(root);
+    const modal = new bootstrap.Modal(root);
     modal.show();
-
-    const input = document.getElementById('text-input-popup-input-text');
 
     return new Promise(resolve => {
         const resolveAndClose = result => {
@@ -41,22 +37,20 @@ async function showTextInputPopup(placeholder, submit_text_button){
             modal.hide();
             resolve(result);
         }
-        document.getElementById('text-input-popup-backdrop-btn').addEventListener('click', () => resolveAndClose(null));
-        document.getElementById('text-input-popup-submit-btn').addEventListener('click', () => resolveAndClose(input.value));
+        closeBtn.addEventListener('click', () => resolveAndClose(null));
+        submitBtn.addEventListener('click', () => resolveAndClose(input.value));
     });
 }
 
 function showToast(title, description){
     const container = document.getElementById("toast-container");
-    container.innerHTML = container.innerHTML + generate_toast(title, description);
+    const toastEl = generate_toast(title, description);
+    container.append(toastEl);
 
-    const toastElList = document.querySelectorAll(".toast");
-    toastElList.forEach((toastEl) => {
-        const inst = bootstrap.Toast.getOrCreateInstance(toastEl);
-        inst.show();
-        toastEl.addEventListener("hidden.bs.toast", () => {
-            inst.dispose();
-            toastEl.remove();
-        }, {once: true});
-    });
+    const inst = bootstrap.Toast.getOrCreateInstance(toastEl);
+    toastEl.addEventListener("hidden.bs.toast", () => {
+        inst.dispose();
+        toastEl.remove();
+    }, {once: true});
+    inst.show();
 }

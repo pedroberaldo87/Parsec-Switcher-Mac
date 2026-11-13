@@ -10,6 +10,7 @@ pub enum AppError {
     FileError(String),
     NicknameNotExists,
     ConfigFileError(String),
+    InvalidNickname(String),
 }
 
 impl std::fmt::Display for AppError {
@@ -23,6 +24,7 @@ impl std::fmt::Display for AppError {
             Self::FileError(s) => write!(f, "Erro de arquivo: {s}"),
             Self::NicknameNotExists => write!(f, "Apelido não encontrado"),
             Self::ConfigFileError(s) => write!(f, "Erro no arquivo de configuração: {s}"),
+            Self::InvalidNickname(s) => write!(f, "Apelido inválido: {s}"),
         }
     }
 }
